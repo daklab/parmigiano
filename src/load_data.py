@@ -134,23 +134,12 @@ def load_genes(params, genes):
     Zs.index = Zs.index.droplevel(0)
     Zs = Zs.fillna(0) # some genes dont have consistent annotations because they are constant within the gene
     
-    if params['enformer_preds']: 
-        if params['cell'] != 'coding':
-            enformer = pd.read_csv(params['enformer_path'], sep = "\t")
-            # Trying absolute values of delta columns
-            delta_columns = [col for col in enformer.columns if 'delta' in col]
-            enformer[delta_columns] = enformer[delta_columns].abs()
-            Zs = Zs.merge(enformer, left_on = 'variant_id', right_on = 'SNP').drop(['CHR','SNP','BP','A1','A2'], axis = 1)
-            #Zs[delta_columns] = Zs[delta_columns].apply(lambda x: x / x.std(), axis=0)
-    try:
-        Zs = Zs.drop(['case_maf', 'adsp_maf'], axis= 1) ## dont use case-related minor allele frequencies
-        # scale observed MAFs properly
-        Zs[['control_maf']] = -np.log(Zs[['control_maf']].astype(float))
-        Zs[['control_maf']] = Zs[['control_maf']].replace(np.inf, 14)
-        Zs[['control_maf']] = (Zs[['control_maf']]-Zs[['control_maf']].min())/ (Zs[['control_maf']].max() - Zs[['control_maf']].min())
-        Zs['intercept'] = 1 
-    except:
-        print("control maf not present")
+    if (params['enformer_preds']) & (params['cell'] != 'coding'): 
+        enformer = pd.read_csv(params['enformer_path'], sep = "\t")
+        delta_columns = [col for col in enformer.columns if 'delta' in col]
+        enformer[delta_columns] = enformer[delta_columns].abs()
+        Zs = Zs.merge(enformer, left_on = 'variant_id', right_on = 'SNP').drop(['CHR','SNP','BP','A1','A2'], axis = 1)
+        
     if type(params['annotations']) == list: 
         Zs = Zs[params['annotations']]
     elif params['annotations'] == 'none':
