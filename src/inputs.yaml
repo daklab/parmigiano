@@ -1,8 +1,10 @@
 ---
-output: "rho_uniform_onewg"
-simulate: True
-model: "gruyereO" # Can be gruyereO, gruyereBurden, gruyereSKAT 
+output: "burden_prior"
+simulate: False
+model: "gruyereBurden" # Can be gruyereO, gruyereBurden, gruyereSKAT 
+burden_prior: True
 
+burden_model: "/gpfs/commons/groups/knowles_lab/data/ADSP_reguloML/Alzheimer-RV/data/gruyere/true/pergene_burden_coding_updated"
 jointly_trained_model: "/gpfs/commons/groups/knowles_lab/data/ADSP_reguloML/Alzheimer-RV/data/gruyere/true/joint_burden_coding" # or path to a jointly trained model 
 epochs: 300
 n_samples: 50

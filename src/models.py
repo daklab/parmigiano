@@ -18,7 +18,7 @@ class gruyereSKAT(PyroModule):
         
     def forward(self, data, params, simulate = False):
         num_indivs = data.G['train'].shape[0]
-        w_g = pyro.sample("w_g", dist.Normal(0,1))
+        w_g = pyro.sample("w_g", dist.Normal(data.wg_prior,1))
         alpha = pyro.sample('alpha', dist.Normal(0,1).expand([data.num_cov]).to_event(1))   
         lambda_ = ((data.Z.T * data.maf_weights).T.matmul(data.tau)) * w_g
         Z_norm = pyro.sample("Z", dist.Normal(0,1).expand([len(data.maf_weights)]).to_event(1))
@@ -43,7 +43,7 @@ class gruyereBurden(PyroModule):
         
     def forward(self, data, params, simulate = False):
         num_indivs = data.G['train'].shape[0]
-        w_g = pyro.sample("w_g", dist.Normal(0,1))
+        w_g = pyro.sample("w_g", dist.Normal(data.wg_prior,1))
         alpha = pyro.sample('alpha', dist.Normal(0,1).expand([data.num_cov]).to_event(1))   
         lambda_ = ((data.Z.T * data.maf_weights).T.matmul(data.tau)) * w_g
         if simulate:
@@ -65,8 +65,8 @@ class gruyereO(PyroModule):
         
     def forward(self, data, params, simulate = False):
         num_indivs = data.G['train'].shape[0]
-        rho = pyro.sample("rho", dist.Uniform(0,1))
-        w_g = pyro.sample("w_g", dist.Normal(0,1))
+        rho = pyro.sample("rho", dist.Beta(0.5,0.5))
+        w_g = pyro.sample("w_g", dist.Normal(data.wg_prior,1))
         alpha = pyro.sample('alpha', dist.Normal(0,1).expand([data.num_cov]).to_event(1))   
         lambda_ = ((data.Z.T * data.maf_weights).T.matmul(data.tau)) * w_g
         Z_norm = pyro.sample("Z", dist.Normal(0,1).expand([len(data.maf_weights)]).to_event(1))

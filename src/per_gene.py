@@ -83,6 +83,8 @@ def main():
         enformer = pd.read_csv(params['enformer_path'], sep = "\t")
         delta_columns = [col for col in enformer.columns if 'delta' in col]
         enformer[delta_columns] = enformer[delta_columns].abs()
+    if params['burden_prior']:
+        burden_priors = pd.read_csv(os.path.join(params['burden_model'], f'chr{str(CHRO_NB)}.csv'), index_col = 0)
     tau, _, _ = load_data.load_model(params['jointly_trained_model']) # pre-trained parameters
     X, Y, genes, skip = load_data.read_data(params)
     stats = {}
@@ -106,6 +108,10 @@ def main():
         Zs['intercept'] = 1 
         Zs = Zs.fillna(0) 
         data = data_class.PerGeneAD.from_pandas(Gs, Zs, X, Y, params)
+        if params['burden_prior']: 
+            data.wg_prior = torch.tensor(burden_priors.loc[GENE, 'coef'], dtype = torch.float32)
+        else:
+            data.wg_prior = 0.0
         data.tau = tau
         stats[GENE] = fit(data, params)
         if i % 30 == 0:
