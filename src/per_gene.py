@@ -40,12 +40,9 @@ params['genes'] = CHRO_NB
 
 
 def fit(data, params):
-    simulate = False
     if params['simulate']:
-        data = getattr(models, params['model'])().forward(data, params)
-        params['simulate'] = False
-        simulate = True
-    model = models.gruyereO()
+        data = getattr(models, params['model'])().forward(data, params, True)
+    model = getattr(models, params['model'])()
     guide = AutoGuideList(model)
     to_optimize = ['rho']
     guide.add(AutoNormal(poutine.block(model, hide = to_optimize)))
@@ -65,12 +62,12 @@ def fit(data, params):
         if variable in ['w_g', 'w2g', 'rho']:
             results[variable] = float(posterior_stats[variable]['mean'])
             results[variable + "_std"] = float(posterior_stats[variable]['std'])
-    if simulate == True:
-        fields_list = [f.name for f in fields(data)]
+    if params['simulate']:
+        fields_list = list(data.__dict__.keys())
         for var in fields_list:
             if var in ['wg', 'rho', 'w2g']:
                 results['true_' + var] = float(getattr(data, var))
-            if var  == 'Z_norm':
+            if var == 'Z_norm':
                 results['Z_R'] = np.corrcoef(data.Z_norm, posterior_stats['Z']['mean'])[0,1]
     return results
 
