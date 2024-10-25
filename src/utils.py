@@ -71,7 +71,7 @@ def load_skat_raw(path, cell, type_test, threshold):
 
 def load_staar_raw(path, cell, ngenes):
     '''
-    Load the most significant genes from STAAR for analysis in gruyere
+    Load the most significant genes from STAAR for analysis 
     Inputs:
         - path: location of STAAR outputs
         - cell: cell to focus on for STAAR results
@@ -94,7 +94,7 @@ def load_staar_raw(path, cell, ngenes):
 
 def load_fst(path, cell, threshold, type_test = "D+B"):
     '''
-    Load the most significant genes from FST for analysis in gruyere
+    Load the most significant genes from FST for analysis
     Inputs:
         - path: location of FST outputs
         - cell: cell to focus on for FST results
@@ -124,7 +124,7 @@ def convert_distributions(variable, distribution, counts, data):
     '''
     This function takes the specified distibutions that variables should be drawn from and converts it to code
     Inputs:
-        - variable: This is a string of a learnt variable of gruyere ie. "tau"
+        - variable: This is a string of a learnt variable of parmigiano ie. "tau"
         - distribution: This is a list specifying distribution and optionally parameters ie ["Normal", 0, 1] or ["normal"]
         - data: This is a data_class object with genotype, annotation, and phenotype data
     Outputs:
