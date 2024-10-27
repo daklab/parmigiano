@@ -4,4 +4,4 @@ We develop a Bayesian hierarchical genome-wide rare variant association test wit
 
 ![parmigiano model](figures/parmigiano%20Model.png)
 
-
+Detailed tutorial coming soon!
