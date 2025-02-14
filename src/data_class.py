@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 from sklearn.model_selection import train_test_split
 
 RANDOM_STATE = 42
-    
+# Load genome-wide data class (joint model)
 @dataclass
 class GenomeWideAD: 
     G: dict
@@ -69,7 +69,7 @@ class GenomeWideAD:
             device = device 
         )
     
-    
+# For per-gene models
 @dataclass
 class PerGeneAD: 
     G: dict
