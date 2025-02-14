@@ -16,6 +16,8 @@ module load cuda/10.0
 source /gpfs/commons/home/adas/miniconda3/bin/activate
 conda activate pyro
 
+# load inputs
+# for each cell and chromosome pair, perform per-gene scoring
 params=("inputs.yaml")
 cell_index=$((SLURM_ARRAY_TASK_ID % ${#params[@]}))
 params=${params[$cell_index]}
